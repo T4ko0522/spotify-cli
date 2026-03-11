@@ -7,8 +7,9 @@ import (
 )
 
 var devicesCmd = &cobra.Command{
-	Use:   "devices",
-	Short: "List available Spotify devices",
+	Use:     "devices",
+	Aliases: []string{"d"},
+	Short:   "List available Spotify devices",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		devices, err := spotifyPlayer.Devices(cmd.Context())
 		if err != nil {

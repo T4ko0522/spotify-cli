@@ -9,8 +9,9 @@ import (
 )
 
 var nextCmd = &cobra.Command{
-	Use:   "next",
-	Short: "Skip to next track",
+	Use:     "next",
+	Aliases: []string{"n"},
+	Short:   "Skip to next track",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := spotifyPlayer.Next(cmd.Context()); err != nil {
 			return err

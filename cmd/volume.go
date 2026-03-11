@@ -8,8 +8,9 @@ import (
 )
 
 var volumeCmd = &cobra.Command{
-	Use:   "volume [0-100]",
-	Short: "Get or set playback volume",
+	Use:     "volume [0-100]",
+	Aliases: []string{"v"},
+	Short:   "Get or set playback volume",
 	Args:  cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := cmd.Context()

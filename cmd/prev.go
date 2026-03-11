@@ -9,8 +9,9 @@ import (
 )
 
 var backCmd = &cobra.Command{
-	Use:   "back",
-	Short: "Skip to previous track",
+	Use:     "back",
+	Aliases: []string{"b"},
+	Short:   "Skip to previous track",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := spotifyPlayer.Previous(cmd.Context()); err != nil {
 			return err

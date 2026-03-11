@@ -9,8 +9,9 @@ import (
 )
 
 var playCmd = &cobra.Command{
-	Use:   "play",
-	Short: "Resume playback",
+	Use:     "play",
+	Aliases: []string{"p"},
+	Short:   "Resume playback",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := spotifyPlayer.Play(cmd.Context()); err != nil {
 			if errors.Is(err, player.ErrAlreadyPlaying) {
