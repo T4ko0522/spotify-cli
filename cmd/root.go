@@ -24,21 +24,17 @@ var rootCmd = &cobra.Command{
 	SilenceErrors: true,
 	SilenceUsage:  true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		// init command doesn't need config yet
-		if cmd.Name() == "init" {
+		// setup command handles config and auth on its own
+		if cmd.Name() == "setup" {
 			return nil
 		}
 		if err := config.Load(); err != nil {
 			return err
 		}
-		// login command doesn't need an existing token
-		if cmd.Name() == "login" {
-			return nil
-		}
 		ctx := context.Background()
 		authenticator, token, err := auth.GetClient(ctx)
 		if err != nil {
-			return fmt.Errorf("%w\nRun 'spt login' to authenticate", err)
+			return fmt.Errorf("%w\nRun 'spt setup' to authenticate", err)
 		}
 		httpClient := authenticator.Client(ctx, token)
 		spotifyClient = spotify.New(httpClient)
@@ -46,7 +42,7 @@ var rootCmd = &cobra.Command{
 		return nil
 	},
 	PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
-		if cmd.Name() == "login" || spotifyClient == nil {
+		if cmd.Name() == "setup" || spotifyClient == nil {
 			return nil
 		}
 		// Re-save token in case it was refreshed during this session
