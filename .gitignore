@@ -1,7 +1,7 @@
 # Binary
 spt.exe
-installer/spt.exe
-installer/spt.msi
+installer/**
+!installer/spt.wxs
 
 # Environment
 .env
