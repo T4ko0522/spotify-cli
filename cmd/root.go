@@ -22,6 +22,10 @@ var rootCmd = &cobra.Command{
 	Short: "Spotify CLI controller",
 	Long:  "A command-line tool to control Spotify playback.",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		// init command doesn't need config yet
+		if cmd.Name() == "init" {
+			return nil
+		}
 		if err := config.Load(); err != nil {
 			return err
 		}
