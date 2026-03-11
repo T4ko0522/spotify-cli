@@ -1,0 +1,16 @@
+# Binary
+spty.exe
+installer/spty.exe
+installer/spty.msi
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.claude/
+.cursorrules
+
+# OS
+Thumbs.db
+Desktop.ini
