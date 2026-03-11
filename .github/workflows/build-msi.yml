@@ -9,6 +9,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Read version from go.mod
+        shell: pwsh
+        run: |
+          $line = Get-Content go.mod | Where-Object { $_ -match '^// AppVersion ' } | Select-Object -First 1
+          if (-not $line) { throw "AppVersion not found in go.mod" }
+          $parts = $line.Split()
+          if ($parts.Length -lt 3) { throw "Invalid AppVersion line format in go.mod" }
+          $version = $parts[2]
+          echo "VERSION=$version" >> $env:GITHUB_ENV
+
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
@@ -20,9 +30,16 @@ jobs:
         run: dotnet tool install --global wix
 
       - name: Build MSI
-        run: wix build installer/spt.wxs -o installer/spt.msi -b installer
+        run: wix build installer/spt.wxs -o installer/spt-${{ env.VERSION }}.msi -b installer
 
       - uses: actions/upload-artifact@v4
         with:
           name: spt-msi
-          path: installer/spt.msi
+          path: installer/spt-${{ env.VERSION }}.msi
+
+      - name: Create GitHub Release and upload MSI
+        uses: softprops/action-gh-release@v2
+        with:
+          files: installer/spt-${{ env.VERSION }}.msi
+          draft: false
+          prerelease: false
