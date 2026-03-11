@@ -8,6 +8,7 @@ import (
 	"github.com/T4ko0522/spotify-cli/internal/auth"
 	"github.com/T4ko0522/spotify-cli/internal/config"
 	"github.com/T4ko0522/spotify-cli/internal/player"
+	"github.com/T4ko0522/spotify-cli/internal/tui"
 	spotify "github.com/zmb3/spotify/v2"
 	"github.com/spf13/cobra"
 )
@@ -23,6 +24,9 @@ var rootCmd = &cobra.Command{
 	Long:          "A command-line tool to control Spotify playback.",
 	SilenceErrors: true,
 	SilenceUsage:  true,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return tui.Run(spotifyClient)
+	},
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// setup command handles config and auth on its own
 		if cmd.Name() == "setup" {
