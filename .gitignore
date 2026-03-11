@@ -1,7 +1,7 @@
 # Binary
-spty.exe
-installer/spty.exe
-installer/spty.msi
+spt.exe
+installer/spt.exe
+installer/spt.msi
 
 # Environment
 .env

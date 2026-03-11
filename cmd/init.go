@@ -27,7 +27,7 @@ var initCmd = &cobra.Command{
 		if err := config.Save(clientID); err != nil {
 			return err
 		}
-		fmt.Println("Client ID saved. Run 'spty login' to authenticate.")
+		fmt.Println("Client ID saved. Run 'spt login' to authenticate.")
 		return nil
 	},
 }

@@ -13,16 +13,16 @@ jobs:
         with:
           go-version-file: go.mod
 
-      - name: Build spty.exe
-        run: go build -o installer/spty.exe .
+      - name: Build spt.exe
+        run: go build -o installer/spt.exe .
 
       - name: Install WiX v5
         run: dotnet tool install --global wix
 
       - name: Build MSI
-        run: wix build installer/spty.wxs -o installer/spty.msi
+        run: wix build installer/spt.wxs -o installer/spt.msi
 
       - uses: actions/upload-artifact@v4
         with:
-          name: spty-msi
-          path: installer/spty.msi
+          name: spt-msi
+          path: installer/spt.msi

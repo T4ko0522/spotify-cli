@@ -18,7 +18,7 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "spty",
+	Use:   "spt",
 	Short: "Spotify CLI controller",
 	Long:  "A command-line tool to control Spotify playback.",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
@@ -36,7 +36,7 @@ var rootCmd = &cobra.Command{
 		ctx := context.Background()
 		authenticator, token, err := auth.GetClient(ctx)
 		if err != nil {
-			return fmt.Errorf("%w\nRun 'spty login' to authenticate", err)
+			return fmt.Errorf("%w\nRun 'spt login' to authenticate", err)
 		}
 		httpClient := authenticator.Client(ctx, token)
 		spotifyClient = spotify.New(httpClient)

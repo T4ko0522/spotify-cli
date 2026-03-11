@@ -18,7 +18,7 @@ func tokenPath() (string, error) {
 		}
 		appData = filepath.Join(home, ".config")
 	}
-	dir := filepath.Join(appData, "spty")
+	dir := filepath.Join(appData, "spt")
 	if err := os.MkdirAll(dir, 0700); err != nil {
 		return "", fmt.Errorf("cannot create config directory: %w", err)
 	}
@@ -47,7 +47,7 @@ func LoadToken() (*oauth2.Token, error) {
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("no saved token found. Run 'spty login' first")
+		return nil, fmt.Errorf("no saved token found. Run 'spt login' first")
 	}
 	var token oauth2.Token
 	if err := json.Unmarshal(data, &token); err != nil {

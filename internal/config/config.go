@@ -22,7 +22,7 @@ func configPath() (string, error) {
 		}
 		appData = filepath.Join(home, ".config")
 	}
-	dir := filepath.Join(appData, "spty")
+	dir := filepath.Join(appData, "spt")
 	if err := os.MkdirAll(dir, 0700); err != nil {
 		return "", fmt.Errorf("cannot create config directory: %w", err)
 	}
@@ -63,5 +63,5 @@ func Load() error {
 		return nil
 	}
 
-	return fmt.Errorf("SPOTIFY_CLIENT_ID is not configured. Run 'spty init' to set up")
+	return fmt.Errorf("SPOTIFY_CLIENT_ID is not configured. Run 'spt init' to set up")
 }
