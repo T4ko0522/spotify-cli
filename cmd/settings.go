@@ -1,14 +1,86 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strings"
 
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/T4ko0522/spotify-cli/internal/config"
 	"github.com/spf13/cobra"
 )
+
+var (
+	selectedStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("10")).Bold(true)
+	unselectedStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("252"))
+	dimStyle        = lipgloss.NewStyle().Foreground(lipgloss.Color("241"))
+)
+
+type settingsModel struct {
+	cursor   int
+	original int
+	saved    bool
+	err      error
+}
+
+func newSettingsModel() settingsModel {
+	cur := 0
+	for i, name := range config.ImgSizeNames {
+		if name == config.ImgSize {
+			cur = i
+			break
+		}
+	}
+	return settingsModel{cursor: cur, original: cur}
+}
+
+func (m settingsModel) Init() tea.Cmd { return nil }
+
+func (m settingsModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "up", "k":
+			if m.cursor > 0 {
+				m.cursor--
+			}
+		case "down", "j":
+			if m.cursor < len(config.ImgSizeNames)-1 {
+				m.cursor++
+			}
+		case "enter":
+			selected := config.ImgSizeNames[m.cursor]
+			if selected != config.ImgSize {
+				if err := config.SaveSettings(selected); err != nil {
+					m.err = err
+					return m, tea.Quit
+				}
+				m.saved = true
+			}
+			return m, tea.Quit
+		case "q", "esc", "ctrl+c":
+			return m, tea.Quit
+		}
+	}
+	return m, nil
+}
+
+func (m settingsModel) View() string {
+	s := "\n画像サイズプリセット:\n\n"
+
+	for i, name := range config.ImgSizeNames {
+		p := config.ImgSizePresets[name]
+		label := fmt.Sprintf("%s (%dx%d)", name, p.Cols, p.Rows)
+
+		if i == m.cursor {
+			s += selectedStyle.Render("  > "+label) + "\n"
+		} else {
+			s += unselectedStyle.Render("    "+label) + "\n"
+		}
+	}
+
+	s += "\n" + dimStyle.Render("↑↓: 選択  Enter: 確定  Esc: キャンセル") + "\n"
+	return s
+}
 
 var settingsCmd = &cobra.Command{
 	Use:   "settings",
@@ -17,47 +89,24 @@ var settingsCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		_ = config.Load()
 
-		fmt.Printf("\n現在の画像サイズ: %s\n\n", config.ImgSize)
-		fmt.Println("プリセット:")
-		for i, name := range config.ImgSizeNames {
-			p := config.ImgSizePresets[name]
-			marker := "  "
-			if name == config.ImgSize {
-				marker = "* "
-			}
-			fmt.Printf("  %s%d. %s (%dx%d)\n", marker, i+1, name, p.Cols, p.Rows)
-		}
-
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Printf("\n番号を選択 [1-%d]: ", len(config.ImgSizeNames))
-		input, err := reader.ReadString('\n')
+		m := newSettingsModel()
+		p := tea.NewProgram(m)
+		result, err := p.Run()
 		if err != nil {
-			return fmt.Errorf("failed to read input: %w", err)
-		}
-		input = strings.TrimSpace(input)
-
-		if input == "" {
-			fmt.Println("\n変更はありません。")
-			return nil
+			return err
 		}
 
-		var idx int
-		if _, err := fmt.Sscanf(input, "%d", &idx); err != nil || idx < 1 || idx > len(config.ImgSizeNames) {
-			return fmt.Errorf("1-%d の番号を入力してください", len(config.ImgSizeNames))
+		final := result.(settingsModel)
+		if final.err != nil {
+			return fmt.Errorf("failed to save settings: %w", final.err)
 		}
-
-		selected := config.ImgSizeNames[idx-1]
-		if selected == config.ImgSize {
-			fmt.Println("\n変更はありません。")
-			return nil
+		if final.saved {
+			selected := config.ImgSizeNames[final.cursor]
+			preset := config.ImgSizePresets[selected]
+			fmt.Printf("設定を保存しました: %s (%dx%d)\n", selected, preset.Cols, preset.Rows)
+		} else {
+			fmt.Println("変更はありません。")
 		}
-
-		if err := config.SaveSettings(selected); err != nil {
-			return fmt.Errorf("failed to save settings: %w", err)
-		}
-
-		p := config.ImgSizePresets[selected]
-		fmt.Printf("\n設定を保存しました: %s (%dx%d)\n", selected, p.Cols, p.Rows)
 		return nil
 	},
 }
