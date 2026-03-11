@@ -18,9 +18,11 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "spt",
-	Short: "Spotify CLI controller",
-	Long:  "A command-line tool to control Spotify playback.",
+	Use:           "spt",
+	Short:         "Spotify CLI controller",
+	Long:          "A command-line tool to control Spotify playback.",
+	SilenceErrors: true,
+	SilenceUsage:  true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// init command doesn't need config yet
 		if cmd.Name() == "init" {
@@ -60,6 +62,7 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	if err := rootCmd.Execute(); err != nil {
+		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
 }
