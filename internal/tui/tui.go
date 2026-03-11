@@ -106,6 +106,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case imageMsg:
 		m.albumImage = msg.rendered
+		return m, tea.ClearScreen
 	case errMsg:
 		m.err = msg.err
 	}
@@ -117,9 +118,17 @@ func (m Model) View() string {
 		return ""
 	}
 	if m.err != nil {
+		if m.showImage {
+			prefix := strings.Repeat(" ", m.imgCols+2)
+			return prefix + fmt.Sprintf("Error: %v", m.err) + "\n\n" + prefix + "Press q to quit.\n"
+		}
 		return fmt.Sprintf("Error: %v\n\nPress q to quit.", m.err)
 	}
 	if m.playing == nil || m.playing.Item == nil {
+		if m.showImage {
+			prefix := strings.Repeat(" ", m.imgCols+2)
+			return prefix + "Nothing is currently playing." + "\n\n" + prefix + "Press q to quit.\n"
+		}
 		return "Nothing is currently playing.\n\nPress q to quit."
 	}
 
