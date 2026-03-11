@@ -149,14 +149,44 @@ func (m Model) View() string {
 
 		t := func(s string) string { return ansi.Truncate(s, textWidth, "…") }
 
-		textLines := []string{
-			"",
-			t(titleStyle.Render(item.Name)),
-			t(artistStyle.Render(formatArtists(item.Artists))),
-			"",
-			t(stateStyle.Render(state)),
-			"",
-			t(renderProgressBar(progress, total, barWidth, timeStr)),
+		var textLines []string
+		switch config.ImgSize {
+		case "small":
+			// コンパクト: タイトル上の空行を削除
+			textLines = []string{
+				t(titleStyle.Render(item.Name)),
+				t(artistStyle.Render(formatArtists(item.Artists))),
+				"",
+				t(stateStyle.Render(state)),
+				"",
+				t(renderProgressBar(progress, total, barWidth, timeStr)),
+			}
+		case "large":
+			// ゆったり: スペースを多めに取る
+			textLines = []string{
+				"",
+				"",
+				t(titleStyle.Render(item.Name)),
+				"",
+				t(artistStyle.Render(formatArtists(item.Artists))),
+				"",
+				"",
+				t(stateStyle.Render(state)),
+				"",
+				"",
+				t(renderProgressBar(progress, total, barWidth, timeStr)),
+			}
+		default:
+			// medium（デフォルト）
+			textLines = []string{
+				"",
+				t(titleStyle.Render(item.Name)),
+				t(artistStyle.Render(formatArtists(item.Artists))),
+				"",
+				t(stateStyle.Render(state)),
+				"",
+				t(renderProgressBar(progress, total, barWidth, timeStr)),
+			}
 		}
 
 		var b strings.Builder
