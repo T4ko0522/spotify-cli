@@ -2,7 +2,9 @@
 
 Spotify の再生をコマンドラインから操作するツールです。
 
-## 機能
+![スクリーンショット](assets/readme.png)
+
+## ✨ 機能
 
 - 再生 / 一時停止 / 曲のスキップ
 - 現在再生中の曲情報の表示（TUI）
@@ -12,29 +14,25 @@ Spotify の再生をコマンドラインから操作するツールです。
 - アクティブデバイスの自動検出・選択
 - 画像サイズプリセットの設定（small / medium / large）
 
-## 必要要件
+## 📋 必要要件
 
 - Go 1.25 以上
 - [Spotify Developer](https://developer.spotify.com/) で作成したアプリの Client ID
 - リダイレクト URI: `http://127.0.0.1:8888/callback`
 
-## インストール
+## 📦 インストール
 
-### ソースからビルド
+### 🔨 ソースからビルド
 
 ```bash
 go install github.com/T4ko0522/spotify-cli@latest
 ```
 
-### MSI インストーラー（Windows）
+### 🪟 MSI インストーラー（Windows）
 
-[Release](https://github.com/T4ko0522/spotify-cli/Releases) から `spt.msi` をダウンロードするか、ローカルでビルドしてください:
+[Release](https://github.com/T4ko0522/spotify-cli/Releases) から `spt.msi` をダウンロードして実行してください。
 
-```bat
-build.bat
-```
-
-## セットアップ
+## 🚀 セットアップ
 
 Client ID の設定と Spotify 認証を行います:
 
@@ -42,9 +40,9 @@ Client ID の設定と Spotify 認証を行います:
 spt setup
 ```
 
-## 使い方
+## 📖 使い方
 
-### TUI モード
+### 🖥️ TUI モード
 
 引数なしで実行すると、現在再生中の曲情報をリアルタイム表示する TUI が起動します。
 WezTerm ではアルバムアートも表示されます。
@@ -53,7 +51,7 @@ WezTerm ではアルバムアートも表示されます。
 spt
 ```
 
-### コマンド一覧
+### 📋 コマンド一覧
 
 | コマンド | エイリアス | 説明 |
 |---|---|---|
@@ -69,7 +67,7 @@ spt
 | `spt devices` | `spt d` | 利用可能なデバイス一覧を表示 |
 | `spt settings` | | 画像サイズプリセットを変更 |
 
-### 設定
+### ⚙️ 設定
 
 `spt settings` で画像サイズプリセットを変更できます。矢印キーで選択し、Enter で確定します。
 
@@ -79,6 +77,6 @@ spt
 | medium | 20×10（デフォルト） |
 | large | 28×14 |
 
-## ライセンス
+## 📄 ライセンス
 
 [Apache 2.0 LICENSE](https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE)
