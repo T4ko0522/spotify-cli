@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+
+  <Package Name="spt"
+           Manufacturer="T4ko0522"
+           Version="1.0.0.0"
+           UpgradeCode="e1b3a5f0-7c2d-4e8a-b6f1-9d0c3e5a7b42">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of spt is already installed." />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="spt">
+        <Component Id="MainExecutable" Guid="a2c4e6f8-1b3d-5a7c-9e0f-2d4b6a8c0e1f">
+          <File Id="SptyExe" Source="spt.exe" KeyPath="yes" />
+          <Environment Id="PATH"
+                       Name="PATH"
+                       Value="[INSTALLFOLDER]"
+                       Permanent="no"
+                       Part="last"
+                       Action="set"
+                       System="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <Feature Id="Main" Title="spt" Level="1">
+      <ComponentRef Id="MainExecutable" />
+    </Feature>
+
+  </Package>
+
+</Wix>
