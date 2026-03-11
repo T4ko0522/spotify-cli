@@ -9,8 +9,9 @@ import (
 )
 
 var pauseCmd = &cobra.Command{
-	Use:   "pause",
-	Short: "Pause playback",
+	Use:     "pause",
+	Aliases: []string{"stop", "s"},
+	Short:   "Pause playback",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := spotifyPlayer.Pause(cmd.Context()); err != nil {
 			if errors.Is(err, player.ErrAlreadyPaused) {
