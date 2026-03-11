@@ -8,6 +8,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/x/ansi"
 	"github.com/T4ko0522/spotify-cli/internal/config"
 	"github.com/zmb3/spotify/v2"
 )
@@ -136,7 +137,7 @@ func (m Model) View() string {
 		total/60000, (total/1000)%60,
 	)
 
-	if m.showImage && m.albumImage != "" {
+	if m.showImage {
 		textWidth := m.width - m.imgCols - 4
 		if textWidth < 20 {
 			textWidth = 20
@@ -146,45 +147,55 @@ func (m Model) View() string {
 			barWidth = 10
 		}
 
+		t := func(s string) string { return ansi.Truncate(s, textWidth, "…") }
+
 		textLines := []string{
 			"",
-			titleStyle.Render(item.Name),
-			artistStyle.Render(formatArtists(item.Artists)),
+			t(titleStyle.Render(item.Name)),
+			t(artistStyle.Render(formatArtists(item.Artists))),
 			"",
-			stateStyle.Render(state),
+			t(stateStyle.Render(state)),
 			"",
-			renderProgressBar(progress, total, barWidth, timeStr),
-			"",
-			helpStyle.Render("Press q to quit"),
+			t(renderProgressBar(progress, total, barWidth, timeStr)),
 		}
 
 		var b strings.Builder
 
-		// Render image — cursor ends at (imgRows-1, imgCols)
-		b.WriteString(m.albumImage)
-
-		// Move cursor back up to the first image row
-		if m.imgRows > 1 {
-			b.WriteString(fmt.Sprintf("\033[%dA", m.imgRows-1))
+		// 画像がある場合: カーソル保存→画像描画→カーソル復元
+		if m.albumImage != "" {
+			b.WriteString("\033[s")      // カーソル位置を保存
+			b.WriteString(m.albumImage)
+			b.WriteString("\033[u")      // 保存した位置に復元（画像の左上）
 		}
 
-		// Write each text line to the right of the image
-		indent := fmt.Sprintf("\033[%dC", m.imgCols+2) // cursor right past image + gap
-		for i, line := range textLines {
-			if i == 0 {
-				// Cursor is already at column imgCols, just add gap
-				b.WriteString("  ")
-			} else {
-				b.WriteString(indent)
+		// テキスト描画（常にインデント付き — 絶対カラム位置指定）
+		col := m.imgCols + 3 // 1-based column: 画像幅 + gap
+		limit := m.imgRows
+		if limit > len(textLines) {
+			limit = len(textLines)
+		}
+		for i := 0; i < limit; i++ {
+			b.WriteString(fmt.Sprintf("\033[%dG", col))
+			line := textLines[i]
+			// スペースパディングで前フレームの残像を上書き
+			pad := textWidth - lipgloss.Width(line)
+			if pad > 0 {
+				line += strings.Repeat(" ", pad)
 			}
 			b.WriteString(line)
 			b.WriteString("\n")
 		}
 
-		// Pad remaining rows if image is taller than text
+		// 画像行の残りを埋める（テキスト行が足りない場合）
 		for i := len(textLines); i < m.imgRows; i++ {
+			b.WriteString(fmt.Sprintf("\033[%dG", col))
+			b.WriteString(strings.Repeat(" ", textWidth))
 			b.WriteString("\n")
 		}
+
+		// ヘルプテキスト（画像エリアの直下）
+		b.WriteString(helpStyle.Render("Press q to quit"))
+		b.WriteString("\n")
 
 		return b.String()
 	}
