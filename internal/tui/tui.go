@@ -8,18 +8,13 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/T4ko0522/spotify-cli/internal/config"
 	"github.com/zmb3/spotify/v2"
-)
-
-const (
-	imgCols = 20
-	imgRows = 10
 )
 
 var (
 	titleStyle  = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("10"))
 	artistStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("12"))
-	albumStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("14"))
 	stateStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("11"))
 	helpStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("241"))
 )
@@ -35,10 +30,18 @@ type Model struct {
 	showImage   bool
 	albumImage  string
 	lastAlbumID spotify.ID
+	imgCols     int
+	imgRows     int
 }
 
 func NewModel(client *spotify.Client) Model {
-	return Model{client: client, width: 80, showImage: IsWezTerm()}
+	return Model{
+		client:    client,
+		width:     80,
+		showImage: IsWezTerm(),
+		imgCols:   config.ImgCols,
+		imgRows:   config.ImgRows,
+	}
 }
 
 func (m Model) Init() tea.Cmd {
@@ -85,6 +88,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				images := msg.playing.Item.Album.Images
 				if len(images) > 0 {
 					url := images[0].URL
+					cols, rows := m.imgCols, m.imgRows
 					return m, func() tea.Msg {
 						data, err := FetchImage(url)
 						if err != nil {
@@ -92,9 +96,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						}
 						processed, err := ProcessImage(data)
 						if err != nil {
-							return imageMsg{rendered: RenderImageITerm2(data, imgCols, imgRows)}
+							return imageMsg{rendered: RenderImageITerm2(data, cols, rows)}
 						}
-						return imageMsg{rendered: RenderImageITerm2(processed, imgCols, imgRows)}
+						return imageMsg{rendered: RenderImageITerm2(processed, cols, rows)}
 					}
 				}
 			}
@@ -133,7 +137,7 @@ func (m Model) View() string {
 	)
 
 	if m.showImage && m.albumImage != "" {
-		textWidth := m.width - imgCols - 4
+		textWidth := m.width - m.imgCols - 4
 		if textWidth < 20 {
 			textWidth = 20
 		}
@@ -146,7 +150,6 @@ func (m Model) View() string {
 			"",
 			titleStyle.Render(item.Name),
 			artistStyle.Render(formatArtists(item.Artists)),
-			albumStyle.Render(item.Album.Name),
 			"",
 			stateStyle.Render(state),
 			"",
@@ -161,12 +164,12 @@ func (m Model) View() string {
 		b.WriteString(m.albumImage)
 
 		// Move cursor back up to the first image row
-		if imgRows > 1 {
-			b.WriteString(fmt.Sprintf("\033[%dA", imgRows-1))
+		if m.imgRows > 1 {
+			b.WriteString(fmt.Sprintf("\033[%dA", m.imgRows-1))
 		}
 
 		// Write each text line to the right of the image
-		indent := fmt.Sprintf("\033[%dC", imgCols+2) // cursor right past image + gap
+		indent := fmt.Sprintf("\033[%dC", m.imgCols+2) // cursor right past image + gap
 		for i, line := range textLines {
 			if i == 0 {
 				// Cursor is already at column imgCols, just add gap
@@ -179,7 +182,7 @@ func (m Model) View() string {
 		}
 
 		// Pad remaining rows if image is taller than text
-		for i := len(textLines); i < imgRows; i++ {
+		for i := len(textLines); i < m.imgRows; i++ {
 			b.WriteString("\n")
 		}
 
@@ -195,7 +198,6 @@ func (m Model) View() string {
 	lines := []string{
 		titleStyle.Render(item.Name),
 		artistStyle.Render(formatArtists(item.Artists)),
-		albumStyle.Render(item.Album.Name),
 		"",
 		stateStyle.Render(state),
 		"",
