@@ -133,11 +133,40 @@ func Login() error {
 	return nil
 }
 
-func GetClient(ctx context.Context) (*spotifyauth.Authenticator, *oauth2.Token, error) {
+var currentTokenSource oauth2.TokenSource
+
+func oauthConfig() *oauth2.Config {
+	return &oauth2.Config{
+		ClientID: config.ClientID,
+		Endpoint: oauth2.Endpoint{
+			AuthURL:   "https://accounts.spotify.com/authorize",
+			TokenURL:  "https://accounts.spotify.com/api/token",
+			AuthStyle: oauth2.AuthStyleInParams,
+		},
+		RedirectURL: redirectURI,
+		Scopes:      scopes,
+	}
+}
+
+// GetClient returns an HTTP client with automatic token refresh.
+func GetClient(ctx context.Context) (*http.Client, error) {
 	token, err := LoadToken()
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	auth := newAuthenticator()
-	return auth, token, nil
+	cfg := oauthConfig()
+	currentTokenSource = cfg.TokenSource(ctx, token)
+	return oauth2.NewClient(ctx, currentTokenSource), nil
+}
+
+// PersistToken saves the current (possibly refreshed) token to disk.
+func PersistToken() error {
+	if currentTokenSource == nil {
+		return nil
+	}
+	token, err := currentTokenSource.Token()
+	if err != nil {
+		return nil
+	}
+	return SaveToken(token)
 }

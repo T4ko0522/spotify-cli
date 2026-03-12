@@ -36,11 +36,10 @@ var rootCmd = &cobra.Command{
 			return err
 		}
 		ctx := context.Background()
-		authenticator, token, err := auth.GetClient(ctx)
+		httpClient, err := auth.GetClient(ctx)
 		if err != nil {
 			return fmt.Errorf("%w\nRun 'spt setup' to authenticate", err)
 		}
-		httpClient := authenticator.Client(ctx, token)
 		spotifyClient = spotify.New(httpClient)
 		spotifyPlayer = player.New(spotifyClient)
 		return nil
@@ -49,12 +48,8 @@ var rootCmd = &cobra.Command{
 		if cmd.Name() == "setup" || cmd.Name() == "settings" || spotifyClient == nil {
 			return nil
 		}
-		// Re-save token in case it was refreshed during this session
-		_, token, err := auth.GetClient(context.Background())
-		if err != nil {
-			return nil // not critical
-		}
-		_ = auth.SaveToken(token)
+		// Save token in case it was refreshed during this session
+		_ = auth.PersistToken()
 		return nil
 	},
 }
