@@ -1,5 +1,7 @@
 # Spotify CLI + TUI
 
+[English](README.en.md) | 日本語
+
 Spotify の再生をコマンドラインから操作するツールです。
 
 ![スクリーンショット](assets/readme.png)
@@ -22,15 +24,7 @@ Spotify の再生をコマンドラインから操作するツールです。
 
 ## 📦 インストール
 
-### 🔨 ソースからビルド
-
-```bash
-go install github.com/T4ko0522/spotify-cli@latest
-```
-
-### 🪟 MSI インストーラー（Windows）
-
-[Release](https://github.com/T4ko0522/spotify-cli/Releases) から `spt.msi` をダウンロードして実行してください。
+[Release](https://github.com/T4ko0522/Spotify-CLI/releases) から `spt.msi` をダウンロードして実行してください。
 
 ## 🚀 セットアップ
 
