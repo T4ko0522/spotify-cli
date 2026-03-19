@@ -1,0 +1,127 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.read.outputs.version }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Read version from go.mod
+        id: read
+        run: |
+          version=$(grep '^// AppVersion ' go.mod | awk '{print $3}')
+          if [ -z "$version" ]; then
+            echo "::error::AppVersion not found in go.mod"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  build-binaries:
+    needs: version
+    permissions:
+      contents: read
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-go@d60b41a563a30bb20f1a820c9e8a24ddf01a0b10 # v5.4.0
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build binary
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: |
+          mkdir -p dist
+          go build -o dist/spt .
+
+      - name: Create archive
+        run: |
+          cd dist
+          tar czf "spt-${VERSION}-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz" spt
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: spt-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/spt-${{ env.VERSION }}-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz
+
+  build-msi:
+    needs: version
+    permissions:
+      contents: read
+    timeout-minutes: 30
+    runs-on: windows-latest
+    env:
+      VERSION: ${{ needs.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-go@d60b41a563a30bb20f1a820c9e8a24ddf01a0b10 # v5.4.0
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build spt.exe
+        run: go build -o installer/spt.exe .
+
+      - name: Install WiX v5
+        run: dotnet tool install --global wix
+
+      - name: Build MSI
+        run: wix build installer/spt.wxs -o installer/spt-${{ env.VERSION }}.msi -b installer
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: spt-windows-msi
+          path: installer/spt-${{ env.VERSION }}.msi
+
+  release:
+    needs: [version, build-binaries, build-msi]
+    permissions:
+      contents: write
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.version.outputs.version }}
+    steps:
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422e7e3c # v4.2.1
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2.2.2
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: ${{ env.VERSION }}
+          files: artifacts/*
+          draft: false
+          prerelease: false
+          overwrite_files: true
