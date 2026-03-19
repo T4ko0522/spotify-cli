@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"os/exec"
+	"runtime"
 
 	"github.com/T4ko0522/spotify-cli/internal/config"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
@@ -104,7 +105,7 @@ func Login() error {
 	)
 
 	fmt.Println("Opening browser for Spotify login...")
-	if err := exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start(); err != nil {
+	if err := openBrowser(url); err != nil {
 		fmt.Printf("Open this URL in your browser:\n%s\n", url)
 	}
 
@@ -134,6 +135,17 @@ func Login() error {
 }
 
 var currentTokenSource oauth2.TokenSource
+
+func openBrowser(url string) error {
+	switch runtime.GOOS {
+	case "darwin":
+		return exec.Command("open", url).Start()
+	case "linux":
+		return exec.Command("xdg-open", url).Start()
+	default: // windows
+		return exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	}
+}
 
 func oauthConfig() *oauth2.Config {
 	return &oauth2.Config{

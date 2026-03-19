@@ -6,21 +6,14 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/T4ko0522/spotify-cli/internal/config"
 	"golang.org/x/oauth2"
 )
 
 func tokenPath() (string, error) {
-	appData := os.Getenv("APPDATA")
-	if appData == "" {
-		home, err := os.UserHomeDir()
-		if err != nil {
-			return "", fmt.Errorf("cannot determine home directory: %w", err)
-		}
-		appData = filepath.Join(home, ".config")
-	}
-	dir := filepath.Join(appData, "spt")
-	if err := os.MkdirAll(dir, 0700); err != nil {
-		return "", fmt.Errorf("cannot create config directory: %w", err)
+	dir, err := config.Dir()
+	if err != nil {
+		return "", err
 	}
 	return filepath.Join(dir, "token.json"), nil
 }

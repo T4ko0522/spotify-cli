@@ -40,18 +40,27 @@ func applyPreset(name string) {
 	}
 }
 
-func configPath() (string, error) {
-	appData := os.Getenv("APPDATA")
-	if appData == "" {
-		home, err := os.UserHomeDir()
-		if err != nil {
-			return "", fmt.Errorf("cannot determine home directory: %w", err)
-		}
-		appData = filepath.Join(home, ".config")
+// Dir returns the spt config directory, creating it if needed.
+// Uses os.UserConfigDir which resolves to:
+//   - Windows: %AppData%
+//   - macOS:   ~/Library/Application Support
+//   - Linux:   $XDG_CONFIG_HOME or ~/.config
+func Dir() (string, error) {
+	base, err := os.UserConfigDir()
+	if err != nil {
+		return "", fmt.Errorf("cannot determine config directory: %w", err)
 	}
-	dir := filepath.Join(appData, "spt")
+	dir := filepath.Join(base, "spt")
 	if err := os.MkdirAll(dir, 0700); err != nil {
 		return "", fmt.Errorf("cannot create config directory: %w", err)
+	}
+	return dir, nil
+}
+
+func configPath() (string, error) {
+	dir, err := Dir()
+	if err != nil {
+		return "", err
 	}
 	return filepath.Join(dir, "config.json"), nil
 }
