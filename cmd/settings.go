@@ -65,7 +65,7 @@ func (m settingsModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m settingsModel) View() string {
-	s := "\n画像サイズプリセット:\n\n"
+	s := "\nImage size preset:\n\n"
 
 	for i, name := range config.ImgSizeNames {
 		p := config.ImgSizePresets[name]
@@ -78,7 +78,7 @@ func (m settingsModel) View() string {
 		}
 	}
 
-	s += "\n" + dimStyle.Render("↑↓: 選択  Enter: 確定  Esc: キャンセル") + "\n"
+	s += "\n" + dimStyle.Render("Up/Down: select  Enter: confirm  Esc: cancel") + "\n"
 	return s
 }
 
@@ -103,9 +103,9 @@ var settingsCmd = &cobra.Command{
 		if final.saved {
 			selected := config.ImgSizeNames[final.cursor]
 			preset := config.ImgSizePresets[selected]
-			fmt.Printf("設定を保存しました: %s (%dx%d)\n", selected, preset.Cols, preset.Rows)
+			fmt.Printf("Settings saved: %s (%dx%d)\n", selected, preset.Cols, preset.Rows)
 		} else {
-			fmt.Println("変更はありません。")
+			fmt.Println("No changes.")
 		}
 		return nil
 	},

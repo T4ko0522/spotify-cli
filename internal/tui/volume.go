@@ -158,7 +158,7 @@ func (m volumeModel) View() string {
 	b.WriteString(fmt.Sprintf("[%s] %d/100\n", bar, m.volume))
 
 	b.WriteString("\n")
-	b.WriteString(volHelpStyle.Render("← → / ↑ ↓: 音量調整  数字: 直接入力  Enter: 決定  q: 終了"))
+	b.WriteString(volHelpStyle.Render("Arrows: adjust  0-9: type value  Enter: confirm  q: quit"))
 	b.WriteString("\n")
 
 	return b.String()
