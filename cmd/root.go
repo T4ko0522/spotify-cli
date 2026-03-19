@@ -16,6 +16,7 @@ import (
 var (
 	spotifyPlayer *player.Player
 	spotifyClient *spotify.Client
+	showLyrics    bool
 )
 
 var rootCmd = &cobra.Command{
@@ -25,6 +26,9 @@ var rootCmd = &cobra.Command{
 	SilenceErrors: true,
 	SilenceUsage:  true,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if showLyrics {
+			return tui.RunLyrics(spotifyClient)
+		}
 		return tui.Run(spotifyClient)
 	},
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
@@ -52,6 +56,10 @@ var rootCmd = &cobra.Command{
 		_ = auth.PersistToken()
 		return nil
 	},
+}
+
+func init() {
+	rootCmd.Flags().BoolVarP(&showLyrics, "lyrics", "l", false, "Show lyrics for the currently playing track")
 }
 
 func Execute() {
