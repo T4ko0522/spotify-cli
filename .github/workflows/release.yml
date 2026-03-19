@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: actions/setup-go@d60b41a563a30bb20f1a820c9e8a24ddf01a0b10 # v5.4.0
+      - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
           cache: true
@@ -83,7 +83,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - uses: actions/setup-go@d60b41a563a30bb20f1a820c9e8a24ddf01a0b10 # v5.4.0
+      - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
           cache: true
@@ -111,7 +111,7 @@ jobs:
     env:
       VERSION: ${{ needs.version.outputs.version }}
     steps:
-      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422e7e3c # v4.2.1
+      - uses: actions/download-artifact@v4
         with:
           path: artifacts
           merge-multiple: true
