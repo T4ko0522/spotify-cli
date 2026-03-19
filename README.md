@@ -1,25 +1,40 @@
-# Spotify CLI + TUI
+<h1 align="center">Spotify-CLI</h1>
 
-English | [日本語](README.ja.md)
+<h3 align="center">Control Spotify from your terminal. TUI + CLI.</h3>
 
-A command-line tool to control Spotify playback.
+<p align="center">
+  <img src="assets/readme.png" alt="spt" width="600" />
+</p>
 
-![Screenshot](assets/readme.png)
+<p align="center">
+  <a href="https://github.com/T4ko0522/Spotify-CLI/releases"><img src="https://img.shields.io/github/v/release/T4ko0522/Spotify-CLI?style=flat-square&label=version" alt="Release" /></a>
+  <a href="https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE"><img src="https://img.shields.io/github/license/T4ko0522/Spotify-CLI?style=flat-square" alt="License" /></a>
+  <img src="https://img.shields.io/badge/go-1.25+-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go 1.25+" />
+  <img src="https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey?style=flat-square" alt="Platform" />
+</p>
+
+<p align="center">
+  Now Playing TUI · Album Art · Synced Lyrics · Volume Control · Device Management
+</p>
+
+<p align="center">
+  English | <a href="README.ja.md">日本語</a>
+</p>
+
+---
 
 ## ✨ Features
 
-- Play / Pause / Skip tracks
-- Now Playing display (TUI)
-- Album art display (WezTerm supported)
-- Synced lyrics display (via [LRCLIB](https://lrclib.net))
-- Volume control (TUI / command)
-- List available devices
-- Auto-detect and select active device
-- Image size presets (small / medium / large)
+- **Now Playing TUI** — real-time track info with album art (WezTerm)
+- **Synced Lyrics** — timestamped lyrics via [LRCLIB](https://lrclib.net)
+- **Playback Control** — play, stop, next, back
+- **Volume Control** — TUI slider or direct value
+- **Device Management** — list and switch active devices
+- **Image Presets** — small / medium / large album art
 
 ## 📋 Requirements
 
-- Client ID from an app created on [Spotify Developer](https://developer.spotify.com/)
+- Client ID from [Spotify Developer](https://developer.spotify.com/)
 - Redirect URI: `http://127.0.0.1:8888/callback`
 
 ## 📦 Installation
@@ -30,35 +45,23 @@ Download `spt.msi` from [Releases](https://github.com/T4ko0522/Spotify-CLI/relea
 
 ### macOS / Linux
 
-#### From source (requires Go 1.25+)
+**From source** (requires Go 1.25+):
 
 ```bash
 go install github.com/T4ko0522/spotify-cli@latest
 ```
 
-#### From binary
+**From binary**: Download from [Releases](https://github.com/T4ko0522/Spotify-CLI/releases) and place in your `$PATH`.
 
-Download the appropriate binary for your platform from [Releases](https://github.com/T4ko0522/Spotify-CLI/releases) and place it in your `$PATH`.
-
-## 🚀 Setup
-
-Configure your Client ID and authenticate with Spotify:
+## 🚀 Quick Start
 
 ```bash
-spt setup
+spt setup    # Configure Client ID & authenticate
+spt          # Launch Now Playing TUI
+spt -l       # Show synced lyrics
 ```
 
-## 📖 Usage
-
-### 🖥️ TUI Mode
-
-Run without arguments to launch the TUI, which shows the currently playing track in real time. Album art is displayed in WezTerm.
-
-```bash
-spt
-```
-
-### 📋 Command Reference
+## 📖 Commands
 
 | Command | Alias | Description |
 |---|---|---|
@@ -75,9 +78,9 @@ spt
 | `spt devices` | `spt d` | List available devices |
 | `spt settings` | | Change image size preset |
 
-### ⚙️ Settings
+## ⚙️ Settings
 
-Use `spt settings` to change the image size preset. Use arrow keys to select and Enter to confirm.
+Use `spt settings` to change album art size. Arrow keys to select, Enter to confirm.
 
 | Preset | Size |
 |---|---|
@@ -87,4 +90,4 @@ Use `spt settings` to change the image size preset. Use arrow keys to select and
 
 ## 📄 License
 
-[Apache 2.0 LICENSE](https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE)
+[Apache-2.0 LICENSE](https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE)

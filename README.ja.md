@@ -1,21 +1,36 @@
-# Spotify CLI + TUI
+<h1 align="center">Spotify-CLI</h1>
 
-[English](README.md) | 日本語
+<h3 align="center">ターミナルからSpotifyを操作できます。TUI + CLI</h3>
 
-Spotify の再生をコマンドラインから操作するツールです。
+<p align="center">
+  <img src="assets/readme.png" alt="spt" width="600" />
+</p>
 
-![スクリーンショット](assets/readme.png)
+<p align="center">
+  <a href="https://github.com/T4ko0522/Spotify-CLI/releases"><img src="https://img.shields.io/github/v/release/T4ko0522/Spotify-CLI?style=flat-square&label=version" alt="Release" /></a>
+  <a href="https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE"><img src="https://img.shields.io/github/license/T4ko0522/Spotify-CLI?style=flat-square" alt="License" /></a>
+  <img src="https://img.shields.io/badge/go-1.25+-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go 1.25+" />
+  <img src="https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey?style=flat-square" alt="Platform" />
+</p>
+
+<p align="center">
+  Now Playing TUI · アルバムアート · 同期歌詞 · 音量調整 · デバイス管理
+</p>
+
+<p align="center">
+  <a href="README.md">English</a> | 日本語
+</p>
+
+---
 
 ## ✨ 機能
 
-- 再生 / 一時停止 / 曲のスキップ
-- 現在再生中の曲情報の表示（TUI）
-- アルバムアート表示（WezTerm 対応）
-- 同期歌詞の表示（[LRCLIB](https://lrclib.net) 経由）
-- 音量の調整（TUI / コマンド）
-- 接続デバイス一覧の表示
-- アクティブデバイスの自動検出・選択
-- 画像サイズプリセットの設定（small / medium / large）
+- **Now Playing TUI** — リアルタイムのトラック情報とアルバムアート表示（WezTerm）
+- **同期歌詞** — [LRCLIB](https://lrclib.net) 経由のタイムスタンプ付き歌詞
+- **再生制御** — play / stop / next / back
+- **音量調整** — TUI スライダーまたは直接値指定
+- **デバイス管理** — デバイス一覧とアクティブデバイス切替
+- **画像プリセット** — small / medium / large のアルバムアートサイズ
 
 ## 📋 必要要件
 
@@ -30,36 +45,23 @@ Spotify の再生をコマンドラインから操作するツールです。
 
 ### macOS / Linux
 
-#### ソースからビルド（Go 1.25+ が必要）
+**ソースからビルド**（Go 1.25+ が必要）:
 
 ```bash
 go install github.com/T4ko0522/spotify-cli@latest
 ```
 
-#### バイナリ
+**バイナリ**: [Release](https://github.com/T4ko0522/Spotify-CLI/releases) からダウンロードし、`$PATH` に配置してください。
 
-[Release](https://github.com/T4ko0522/Spotify-CLI/releases) からお使いのプラットフォーム用のバイナリをダウンロードし、`$PATH` に配置してください。
-
-## 🚀 セットアップ
-
-Client ID の設定と Spotify 認証を行います:
+## 🚀 クイックスタート
 
 ```bash
-spt setup
+spt setup    # Client ID 設定 & Spotify 認証
+spt          # Now Playing TUI を起動
+spt -l       # 同期歌詞を表示
 ```
 
-## 📖 使い方
-
-### 🖥️ TUI モード
-
-引数なしで実行すると、現在再生中の曲情報をリアルタイム表示する TUI が起動します。
-WezTerm ではアルバムアートも表示されます。
-
-```bash
-spt
-```
-
-### 📋 コマンド一覧
+## 📖 コマンド一覧
 
 | コマンド | エイリアス | 説明 |
 |---|---|---|
@@ -76,9 +78,9 @@ spt
 | `spt devices` | `spt d` | 利用可能なデバイス一覧を表示 |
 | `spt settings` | | 画像サイズプリセットを変更 |
 
-### ⚙️ 設定
+## ⚙️ 設定
 
-`spt settings` で画像サイズプリセットを変更できます。矢印キーで選択し、Enter で確定します。
+`spt settings` でアルバムアートのサイズを変更できます。矢印キーで選択し、Enter で確定。
 
 | プリセット | サイズ |
 |---|---|
@@ -88,4 +90,4 @@ spt
 
 ## 📄 ライセンス
 
-[Apache 2.0 LICENSE](https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE)
+[Apache-2.0 LICENSE](https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE)
