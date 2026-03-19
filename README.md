@@ -1,76 +1,90 @@
 # Spotify CLI + TUI
 
-[English](README.en.md) | 日本語
+English | [日本語](README.ja.md)
 
-Spotify の再生をコマンドラインから操作するツールです。
+A command-line tool to control Spotify playback.
 
-![スクリーンショット](assets/readme.png)
+![Screenshot](assets/readme.png)
 
-## ✨ 機能
+## ✨ Features
 
-- 再生 / 一時停止 / 曲のスキップ
-- 現在再生中の曲情報の表示（TUI）
-- アルバムアート表示（WezTerm 対応）
-- 音量の調整（TUI / コマンド）
-- 接続デバイス一覧の表示
-- アクティブデバイスの自動検出・選択
-- 画像サイズプリセットの設定（small / medium / large）
+- Play / Pause / Skip tracks
+- Now Playing display (TUI)
+- Album art display (WezTerm supported)
+- Synced lyrics display (via [LRCLIB](https://lrclib.net))
+- Volume control (TUI / command)
+- List available devices
+- Auto-detect and select active device
+- Image size presets (small / medium / large)
 
-## 📋 必要要件
+## 📋 Requirements
 
-- Go 1.25 以上
-- [Spotify Developer](https://developer.spotify.com/) で作成したアプリの Client ID
-- リダイレクト URI: `http://127.0.0.1:8888/callback`
+- Client ID from an app created on [Spotify Developer](https://developer.spotify.com/)
+- Redirect URI: `http://127.0.0.1:8888/callback`
 
-## 📦 インストール
+## 📦 Installation
 
-[Release](https://github.com/T4ko0522/Spotify-CLI/releases) から `spt.msi` をダウンロードして実行してください。
+### Windows
 
-## 🚀 セットアップ
+Download `spt.msi` from [Releases](https://github.com/T4ko0522/Spotify-CLI/releases) and run it.
 
-Client ID の設定と Spotify 認証を行います:
+### macOS / Linux
+
+#### From source (requires Go 1.25+)
+
+```bash
+go install github.com/T4ko0522/spotify-cli@latest
+```
+
+#### From binary
+
+Download the appropriate binary for your platform from [Releases](https://github.com/T4ko0522/Spotify-CLI/releases) and place it in your `$PATH`.
+
+## 🚀 Setup
+
+Configure your Client ID and authenticate with Spotify:
 
 ```bash
 spt setup
 ```
 
-## 📖 使い方
+## 📖 Usage
 
-### 🖥️ TUI モード
+### 🖥️ TUI Mode
 
-引数なしで実行すると、現在再生中の曲情報をリアルタイム表示する TUI が起動します。
-WezTerm ではアルバムアートも表示されます。
+Run without arguments to launch the TUI, which shows the currently playing track in real time. Album art is displayed in WezTerm.
 
 ```bash
 spt
 ```
 
-### 📋 コマンド一覧
+### 📋 Command Reference
 
-| コマンド | エイリアス | 説明 |
+| Command | Alias | Description |
 |---|---|---|
-| `spt` | | TUI を起動（Now Playing） |
-| `spt setup` | | Client ID 設定 & Spotify 認証 |
-| `spt play` | `spt p` | 再生を再開 |
-| `spt pause` | `spt stop`, `spt s` | 一時停止 |
-| `spt next` | `spt n` | 次の曲へ |
-| `spt back` | `spt b` | 前の曲へ |
-| `spt now` | | 現在再生中の曲を表示 |
-| `spt volume` | `spt v` | 音量調整 TUI を起動 |
-| `spt volume [0-100]` | `spt v [0-100]` | 音量を設定 |
-| `spt devices` | `spt d` | 利用可能なデバイス一覧を表示 |
-| `spt settings` | | 画像サイズプリセットを変更 |
+| `spt` | | Launch TUI (Now Playing) |
+| `spt --lyrics` | `spt -l` | Show synced lyrics |
+| `spt setup` | | Configure Client ID & Spotify auth |
+| `spt play` | `spt p` | Resume playback |
+| `spt stop` | `spt s` | Pause |
+| `spt next` | `spt n` | Next track |
+| `spt back` | `spt b` | Previous track |
+| `spt now` | | Show currently playing track |
+| `spt volume` | `spt v` | Launch volume control TUI |
+| `spt volume [0-100]` | `spt v [0-100]` | Set volume |
+| `spt devices` | `spt d` | List available devices |
+| `spt settings` | | Change image size preset |
 
-### ⚙️ 設定
+### ⚙️ Settings
 
-`spt settings` で画像サイズプリセットを変更できます。矢印キーで選択し、Enter で確定します。
+Use `spt settings` to change the image size preset. Use arrow keys to select and Enter to confirm.
 
-| プリセット | サイズ |
+| Preset | Size |
 |---|---|
 | small | 16×8 |
-| medium | 20×10（デフォルト） |
+| medium | 20×10 (default) |
 | large | 28×14 |
 
-## 📄 ライセンス
+## 📄 License
 
 [Apache 2.0 LICENSE](https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE)
