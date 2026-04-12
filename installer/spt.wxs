@@ -3,7 +3,7 @@
 
   <Package Name="spt"
            Manufacturer="T4ko0522"
-           Version="1.0.0.0"
+           Version="$(var.Version)"
            UpgradeCode="e1b3a5f0-7c2d-4e8a-b6f1-9d0c3e5a7b42">
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of spt is already installed." />
