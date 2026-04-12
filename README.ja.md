@@ -10,7 +10,7 @@
   <a href="https://github.com/T4ko0522/Spotify-CLI/releases"><img src="https://img.shields.io/github/v/release/T4ko0522/Spotify-CLI?style=flat-square&label=version" alt="Release" /></a>
   <a href="https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE"><img src="https://img.shields.io/github/license/T4ko0522/Spotify-CLI?style=flat-square" alt="License" /></a>
   <img src="https://img.shields.io/badge/go-1.25+-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go 1.25+" />
-  <img src="https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey?style=flat-square" alt="Platform" />
+  <img src="https://img.shields.io/badge/platform-windows%20%7C%20linux-lightgrey?style=flat-square" alt="Platform" />
 </p>
 
 <p align="center">
@@ -43,7 +43,7 @@
 
 [Release](https://github.com/T4ko0522/Spotify-CLI/releases) から `spt.msi` をダウンロードして実行してください。
 
-### macOS / Linux
+### Linux
 
 **ソースからビルド**（Go 1.25+ が必要）:
 
@@ -56,7 +56,7 @@ go install github.com/T4ko0522/spotify-cli@latest
 ## 🚀 クイックスタート
 
 ```bash
-spt setup    # Client ID 設定 & Spotify 認証
+spt init     # Client ID 設定 & Spotify 認証
 spt          # Now Playing TUI を起動
 spt -l       # 同期歌詞を表示
 ```
@@ -67,7 +67,7 @@ spt -l       # 同期歌詞を表示
 |---|---|---|
 | `spt` | | TUI を起動（Now Playing） |
 | `spt --lyrics` | `spt -l` | 同期歌詞を表示 |
-| `spt setup` | | Client ID 設定 & Spotify 認証 |
+| `spt init` | | Client ID 設定 & Spotify 認証 |
 | `spt play` | `spt p` | 再生を再開 |
 | `spt stop` | `spt s` | 一時停止 |
 | `spt next` | `spt n` | 次の曲へ |

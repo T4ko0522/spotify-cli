@@ -10,7 +10,7 @@
   <a href="https://github.com/T4ko0522/Spotify-CLI/releases"><img src="https://img.shields.io/github/v/release/T4ko0522/Spotify-CLI?style=flat-square&label=version" alt="Release" /></a>
   <a href="https://github.com/T4ko0522/Spotify-CLI/blob/main/LICENSE"><img src="https://img.shields.io/github/license/T4ko0522/Spotify-CLI?style=flat-square" alt="License" /></a>
   <img src="https://img.shields.io/badge/go-1.25+-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go 1.25+" />
-  <img src="https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-lightgrey?style=flat-square" alt="Platform" />
+  <img src="https://img.shields.io/badge/platform-windows%20%7C%20linux-lightgrey?style=flat-square" alt="Platform" />
 </p>
 
 <p align="center">
@@ -43,7 +43,7 @@
 
 Download `spt.msi` from [Releases](https://github.com/T4ko0522/Spotify-CLI/releases) and run it.
 
-### macOS / Linux
+### Linux
 
 **From source** (requires Go 1.25+):
 
@@ -56,7 +56,7 @@ go install github.com/T4ko0522/spotify-cli@latest
 ## 🚀 Quick Start
 
 ```bash
-spt setup    # Configure Client ID & authenticate
+spt init     # Configure Client ID & authenticate
 spt          # Launch Now Playing TUI
 spt -l       # Show synced lyrics
 ```
@@ -67,7 +67,7 @@ spt -l       # Show synced lyrics
 |---|---|---|
 | `spt` | | Launch TUI (Now Playing) |
 | `spt --lyrics` | `spt -l` | Show synced lyrics |
-| `spt setup` | | Configure Client ID & Spotify auth |
+| `spt init` | | Configure Client ID & Spotify auth |
 | `spt play` | `spt p` | Resume playback |
 | `spt stop` | `spt s` | Pause |
 | `spt next` | `spt n` | Next track |
