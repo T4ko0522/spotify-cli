@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var setupCmd = &cobra.Command{
-	Use:   "setup",
+var initCmd = &cobra.Command{
+	Use:   "init",
 	Short: "Configure Client ID and authenticate with Spotify",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		reader := bufio.NewReader(os.Stdin)
@@ -57,5 +57,5 @@ var setupCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(setupCmd)
+	rootCmd.AddCommand(initCmd)
 }

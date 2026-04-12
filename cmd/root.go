@@ -32,8 +32,8 @@ var rootCmd = &cobra.Command{
 		return tui.Run(spotifyClient)
 	},
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		// setup/settings commands handle config on their own
-		if cmd.Name() == "setup" || cmd.Name() == "settings" {
+		// init/settings commands handle config on their own
+		if cmd.Name() == "init" || cmd.Name() == "settings" {
 			return nil
 		}
 		if err := config.Load(); err != nil {
@@ -42,14 +42,14 @@ var rootCmd = &cobra.Command{
 		ctx := context.Background()
 		httpClient, err := auth.GetClient(ctx)
 		if err != nil {
-			return fmt.Errorf("%w\nRun 'spt setup' to authenticate", err)
+			return fmt.Errorf("%w\nRun 'spt init' to authenticate", err)
 		}
 		spotifyClient = spotify.New(httpClient)
 		spotifyPlayer = player.New(spotifyClient)
 		return nil
 	},
 	PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
-		if cmd.Name() == "setup" || cmd.Name() == "settings" || spotifyClient == nil {
+		if cmd.Name() == "init" || cmd.Name() == "settings" || spotifyClient == nil {
 			return nil
 		}
 		// Save token in case it was refreshed during this session
