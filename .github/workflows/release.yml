@@ -84,7 +84,7 @@ jobs:
         run: go build -trimpath -ldflags="-s -w" -o installer/spt.exe .
 
       - name: Install WiX v5
-        run: dotnet tool install --global wix
+        run: dotnet tool install --global wix --version 5.0.0
 
       - name: Prepare MSI version
         id: msi-ver
